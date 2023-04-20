@@ -2,8 +2,14 @@ const std = @import("std");
 const print = std.debug.print;
 
 
-pub fn main() void {
-    const ni = 100;
+pub fn main() !void {
+    var prng = std.rand.DefaultPrng.init(blk: {
+        var seed: u32 = undefined;
+        try std.os.getrandom(std.mem.asBytes(&seed));
+        break :blk seed;
+    });
+    const rand = prng.random();
+    const ni = rand.intRangeAtMost(u32, 0, 200);
     print("{}\n", .{&ni});
 
     print("{}\n",.{ni});
